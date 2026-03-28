@@ -11,7 +11,7 @@ jobs:
       - name: Add issue to project
         env:
           GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
-          PROJECT_ID: PVT_kwDOCVSJEM4AemB8
+          PROJECT_ID: PVT_kwHOAS98Es4Afpv-
           ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
           ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
         run: |
