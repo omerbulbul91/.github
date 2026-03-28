@@ -1,0 +1,29 @@
+name: Auto Add Issue to Project
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add issue to project
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_ID: PVT_kwDOCVSJEM4AemB8
+          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        run: |
+          ITEM_ID=$(gh api graphql -f query='
+            mutation($projectId: ID!, $contentId: ID!) {
+              addProjectV2ItemById(input: {projectId: $projectId contentId: $contentId}) {
+                item { id }
+              }
+            }' \
+            -f projectId="$PROJECT_ID" \
+            -f contentId="$ISSUE_NODE_ID" \
+            --jq '.data.addProjectV2ItemById.item.id')
+
+          echo "Item added: $ITEM_ID"
+          echo "Author: $ISSUE_AUTHOR"
